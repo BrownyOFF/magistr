@@ -25,7 +25,8 @@ public class SettingsApply : MonoBehaviour
     void ApplySett()
     {
         PlayerPrefs.SetString("API", APIKeyInput.text.ToString());
-        PlayerPrefs.SetInt("temp", (int)tempSlid.value);
+        PlayerPrefs.SetFloat("temp", (float)tempSlid.value);
         PlayerPrefs.SetInt("maxTok", (int)maxSlid.value);
+        Debug.Log(PlayerPrefs.GetString("API") + "\n" + PlayerPrefs.GetFloat("temp") + "\n" + PlayerPrefs.GetInt("maxTok"));
     }
 }

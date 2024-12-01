@@ -1858,6 +1858,7 @@ GameObject:
   - component: {fileID: 297174151}
   - component: {fileID: 297174150}
   - component: {fileID: 297174149}
+  - component: {fileID: 297174152}
   m_Layer: 0
   m_Name: SettingsBtnn
   m_TagString: Untagged
@@ -1967,6 +1968,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297174147}
   m_CullTransparentMesh: 1
+--- !u!114 &297174152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297174147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6ec13d53cd66e43b9f8d33a5041b7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panel: {fileID: 297381223}
+  APIKeyInput: {fileID: 2083130975}
+  tempSlid: {fileID: 476994833}
+  maxSlid: {fileID: 2084384818}
 --- !u!1 &297381223
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ public class SendRequest : MonoBehaviour
                 new { role = "user", content = $"World Name: {worldName}. Character Name: {characterName}. Genre: {genre}. Preferences: {preferences}." }
             },
             max_tokens = PlayerPrefs.GetInt("maxTok"),
-            temperature = PlayerPrefs.GetInt("temp")
+            temperature = PlayerPrefs.GetFloat("temp")
         };
         Debug.Log(jsonData);
 
