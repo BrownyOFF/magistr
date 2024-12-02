@@ -25,9 +25,4 @@ public class ShowMessage : MonoBehaviour
         messageText.text = message; // Set the text
     }
 
-    void Start()
-    {
-        AddUserMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et justo metus. Ut volutpat posuere nisi, sed sodales dui. Aliquam efficitur metus quam, eu lacinia ex imperdiet id. Vivamus bibendum ex accumsan vehicula tristique. Vestibulum nec tincidunt magna, vitae aliquam velit. Maecenas in molestie neque, eleifend auctor metus. Quisque dapibus, nisi vitae aliquam mattis, mauris purus bibendum libero, sed egestas lorem purus et ante. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.");
-        AddAIMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et justo metus. Ut volutpat posuere nisi, sed sodales dui. Aliquam efficitur metus quam, eu lacinia ex imperdiet id. Vivamus bibendum ex accumsan vehicula tristique. Vestibulum nec tincidunt magna, vitae aliquam velit. Maecenas in molestie neque, eleifend auctor metus. Quisque dapibus, nisi vitae aliquam mattis, mauris purus bibendum libero, sed egestas lorem purus et ante. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.");
-    }
 }

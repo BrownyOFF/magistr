@@ -4,20 +4,30 @@ using Newtonsoft.Json;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using Newtonsoft.Json.Linq;
+
 
 public class SendRequest : MonoBehaviour
 {
     // Memory to store the conversation history
     private List<Dictionary<string, string>> conversationHistory = new List<Dictionary<string, string>>();
+    private string apiUrl;
+    private string apiKey;
+    private ShowMessage showMessage;
+    public GameObject createPanel;
+
+    void Start()
+    {
+        apiKey = PlayerPrefs.GetString("API");
+        apiUrl = "https://api.openai.com/v1/chat/completions";
+        showMessage = GetComponent<ShowMessage>();
+    }
 
     // First request to start the story.
     public IEnumerator CreateStartingStory(string worldName, string characterName, string genre, string preferences) 
     {
-        string apiUrl = "https://api.openai.com/v1/chat/completions";
-        string apiKey = PlayerPrefs.GetString("API");
-
-        // Add the initial system message
-        conversationHistory.Clear(); // Clear history if this is the first request
+        createPanel.SetActive(false);
+        ClearMemory(); // Clear history if this is the first request
         conversationHistory.Add(new Dictionary<string, string> {
             { "role", "system" },
             { "content", "You are a creative story generator who writes immersive stories based on user input." }
@@ -38,6 +48,9 @@ public class SendRequest : MonoBehaviour
         string apiUrl = "https://api.openai.com/v1/chat/completions";
         string apiKey = PlayerPrefs.GetString("API");
 
+        // display message
+        showMessage.AddUserMessage(userInput);
+
         // Add the user's input to the conversation history
         conversationHistory.Add(new Dictionary<string, string> {
             { "role", "user" },
@@ -48,62 +61,69 @@ public class SendRequest : MonoBehaviour
     }
 
     /// Sends the API request and updates the conversation history with the response.
-    private IEnumerator SendAPIRequest(string apiUrl, string apiKey)
+private IEnumerator SendAPIRequest(string apiUrl, string apiKey)
+{
+    var jsonData = new {
+        model = "gpt-4o-mini",
+        messages = conversationHistory,
+        max_tokens = PlayerPrefs.GetInt("maxTok"),
+        temperature = PlayerPrefs.GetFloat("temp")
+    };
+
+    string jsonString = JsonConvert.SerializeObject(jsonData);
+    Debug.Log("Request Payload: " + jsonString);
+
+    using (UnityWebRequest request = new UnityWebRequest(apiUrl, "POST"))
     {
-        // Construct the request data
-        var jsonData = new {
-            model = "gpt-4o-mini",
-            messages = conversationHistory,
-            max_tokens = PlayerPrefs.GetInt("maxTok"),
-            temperature = PlayerPrefs.GetFloat("temp")
-        };
+        byte[] jsonToSend = Encoding.UTF8.GetBytes(jsonString);
+        request.uploadHandler = new UploadHandlerRaw(jsonToSend);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+        request.SetRequestHeader("Content-Type", "application/json");
 
-        // Serialize JSON data
-        string jsonString = JsonConvert.SerializeObject(jsonData);
-        Debug.Log("Request Payload: " + jsonString);
+        yield return request.SendWebRequest();
 
-        using (UnityWebRequest request = new UnityWebRequest(apiUrl, "POST")) {
-            byte[] jsonToSend = Encoding.UTF8.GetBytes(jsonString);
-            request.uploadHandler = new UploadHandlerRaw(jsonToSend);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
-            request.SetRequestHeader("Content-Type", "application/json");
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            string responseText = request.downloadHandler.text;
+            Debug.Log("API Response: " + responseText); // Print full response to inspect
 
-            // Send the request and wait for the response
-            yield return request.SendWebRequest();
+            try
+            {
+                // Parse the response into JObject
+                JObject responseObject = JObject.Parse(responseText);
 
-            if (request.result == UnityWebRequest.Result.Success) {
-                string responseText = request.downloadHandler.text;
-                Debug.Log("API Response: " + responseText);
-
-                // Parse the assistant's response and add it to the conversation history
-                var responseObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseText);
-                if (responseObject != null && responseObject.ContainsKey("choices"))
+                // Check if choices exists and is not empty
+                if (responseObject["choices"] != null && responseObject["choices"].HasValues)
                 {
-                    var choices = responseObject["choices"] as IList<object>;
-                    if (choices != null && choices.Count > 0)
+                    string message = responseObject["choices"][0]["message"]["content"].ToString();
+
+                    // Add the response to conversation history
+                    conversationHistory.Add(new Dictionary<string, string>
                     {
-                        var choice = choices[0] as Dictionary<string, object>;
-                        if (choice != null && choice.ContainsKey("message"))
-                        {
-                            var assistantMessage = choice["message"] as Dictionary<string, string>;
-                            if (assistantMessage != null)
-                            {
-                                conversationHistory.Add(new Dictionary<string, string> {
-                                    { "role", "assistant" },
-                                    { "content", assistantMessage["content"] }
-                                });
-                                Debug.Log("Assistant Response Saved to History: " + assistantMessage["content"]);
-                            }
-                        }
-                    }
+                        { "role", "assistant" },
+                        { "content", message }
+                    });
+
+                    // Display the response
+                    showMessage.AddAIMessage(message);
                 }
-            } else {
-                Debug.LogError($"Request Failed: {request.error}\nResponse: {request.downloadHandler.text}");
+                else
+                {
+                    Debug.LogError("Choices array is empty or null.");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError("Error parsing the response: " + ex.Message);
             }
         }
+        else
+        {
+            Debug.LogError($"Request Failed: {request.error}\nResponse: {request.downloadHandler.text}");
+        }
     }
-
+}
     /// Clears the conversation history (optional for starting fresh).
     public void ClearMemory()
     {

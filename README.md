@@ -16,8 +16,9 @@ This project use OpenAI API for text generation(specifically gpt-4o-mini for low
 ### Done
 Connection to OpenAI API --- done \
 Settings Panel --- done
+Memory --- done
+Display of messages --- done
 ### To do
 Image generation \
 Save progress \
-memory \
 etc
