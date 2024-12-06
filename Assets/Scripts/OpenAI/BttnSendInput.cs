@@ -21,7 +21,8 @@ public class BttnSendInput : MonoBehaviour
     // Update is called once per frame
     void SendInput()
     {
+        Debug.Log("Bttn Pressed");
         userInput = inputField.GetComponent<TMP_InputField>().text;
-        send.ContinueStory(userInput);
+        StartCoroutine(send.ContinueStory(userInput));
     }
 }

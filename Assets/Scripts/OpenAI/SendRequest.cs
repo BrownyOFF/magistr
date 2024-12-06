@@ -26,7 +26,7 @@ public class SendRequest : MonoBehaviour
     // First request to start the story.
     public IEnumerator CreateStartingStory(string worldName, string characterName, string genre, string preferences) 
     {
-        createPanel.SetActive(false);
+        // createPanel.SetActive(false);
         ClearMemory(); // Clear history if this is the first request
         conversationHistory.Add(new Dictionary<string, string> {
             { "role", "system" },
@@ -45,10 +45,8 @@ public class SendRequest : MonoBehaviour
     // Subsequent requests to continue the story.
     public IEnumerator ContinueStory(string userInput) 
     {
-        string apiUrl = "https://api.openai.com/v1/chat/completions";
-        string apiKey = PlayerPrefs.GetString("API");
-
         // display message
+        Debug.Log("Continue story started");
         showMessage.AddUserMessage(userInput);
 
         // Add the user's input to the conversation history
@@ -107,6 +105,7 @@ private IEnumerator SendAPIRequest(string apiUrl, string apiKey)
 
                     // Display the response
                     showMessage.AddAIMessage(message);
+                    createPanel.SetActive(false);
                 }
                 else
                 {
