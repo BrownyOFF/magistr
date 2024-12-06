@@ -15,10 +15,15 @@ This project use OpenAI API for text generation(specifically gpt-4o-mini for low
 
 ### Done
 Connection to OpenAI API --- done \
-Settings Panel --- done
-Memory --- done
-Display of messages --- done
+Settings Panel --- done \
+Memory --- done \
+Display of messages --- done \
+Token count and rimming --- done \
+Save conversation to file for future loading --- done \
 ### To do
 Image generation \
-Save progress \
+Music generation \
+regenerate reply \
 etc
+### Current task
+Load saved conversations
