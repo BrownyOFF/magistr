@@ -17,10 +17,10 @@ public class LoadBttn : MonoBehaviour
         bttn.onClick.AddListener(SendInput);
     }
 
-    // Update is called once per frame
     void SendInput()
     {
         loadPanel.SetActive(true);
+        saveLoadScript.ReadAndLoadBttns();
         initialPanel.SetActive(false);
     }
 }

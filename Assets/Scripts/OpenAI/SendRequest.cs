@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -79,7 +80,7 @@ public class SendRequest : MonoBehaviour
     public void LoadConversationHistory(string filePath)
     {
         conversationHistory = saveLoadScript.LoadConversationHistoryFromFile(filePath);
-        worldNameBase = filePath.Split('/')[filePath.Split('/').Length - 1].Replace(".json", ""); // Extract world name from file path
+        worldNameBase = Path.GetFileNameWithoutExtension(filePath); // Extract world name from file path
         Debug.Log("Conversation history loaded.");
     }
 

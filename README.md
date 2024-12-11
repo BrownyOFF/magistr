@@ -20,10 +20,10 @@ Memory --- done \
 Display of messages --- done \
 Token count and rimming --- done \
 Save conversation to file for future loading --- done \
+Load saved conversations --- done \
 ### To do
 Image generation \
 Music generation \
-regenerate reply \
-etc
+etc \
 ### Current task
-Load saved conversations
+regenerate reply

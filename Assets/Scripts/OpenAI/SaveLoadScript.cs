@@ -1,10 +1,27 @@
+using System;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SaveLoadScript : MonoBehaviour
 {
+    public GameObject[] arr;
+    public GameObject bttnPrefab;
+    public Transform scrollContent;
+    public ShowMessage showMessage;
+    public GameObject loadPanel;
+    public SendRequest sendRequest;
+
+    public void Start()
+    {
+        showMessage = gameObject.GetComponent<ShowMessage>();
+        sendRequest = gameObject.GetComponent<SendRequest>();
+    }
+
     // Метод для збереження історії розмови у файл
     public void SaveConversationHistoryToFile(List<Dictionary<string, string>> conversationHistory, string worldName)
     {
@@ -27,6 +44,61 @@ public class SaveLoadScript : MonoBehaviour
         Debug.Log($"Conversation history saved to {filePath}");
     }
 
+    // Clean prefabs
+    public void CleanBttn()
+    {
+        arr = GameObject.FindGameObjectsWithTag("loadbttn");
+        if(arr.Length == 0)
+            return;
+        
+        foreach (var i in arr)
+        {
+            Destroy(i);
+        }
+    }
+    
+    //load files and bttns
+    public void ReadAndLoadBttns()
+    {
+        string savePath = Application.persistentDataPath;
+        string[] files = Directory.GetFiles(savePath, "*.json");
+        
+        CleanBttn();
+        foreach (string file in files)
+        {
+            string worldName = Path.GetFileNameWithoutExtension(file);
+            
+            GameObject button = Instantiate(bttnPrefab, scrollContent);
+            button.GetComponentInChildren<TMP_Text>().text = worldName;
+
+            button.GetComponent<Button>().onClick.AddListener(() => LoadWorld(file));
+        }
+    }
+    
+    private void LoadWorld(string filePath)
+    {
+        List<Dictionary<string, string>> conversationHistory = LoadConversationHistoryFromFile(filePath);
+        string worldName = Path.GetFileNameWithoutExtension(filePath);
+        Debug.Log($"World loaded: {worldName}");
+
+        foreach (var message in conversationHistory)
+        {
+            string role = message["role"];
+            string content = message["content"];
+            
+            if (role == "user")
+            {
+                showMessage.AddUserMessage(content);
+            }
+            else if (role == "assistant")
+            {
+                showMessage.AddAIMessage(content);
+            }
+        }
+        sendRequest.LoadConversationHistory(filePath);
+        loadPanel.SetActive(false);
+    }
+    
     // Метод для завантаження історії розмови з файлу
     public List<Dictionary<string, string>> LoadConversationHistoryFromFile(string filePath)
     {

@@ -3844,7 +3844,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -333.35004, y: 30.470001}
+  m_AnchoredPosition: {x: -333.3501, y: 30.46997}
   m_SizeDelta: {x: -1056, y: -286.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &656499029
@@ -7774,6 +7774,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 839929843b57e1244ac840f43a0a8077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arr: []
+  bttnPrefab: {fileID: 4846569875440008996, guid: 3e6434d3cff4962468164481387252c9, type: 3}
+  scrollContent: {fileID: 480030470}
+  showMessage: {fileID: 0}
+  loadPanel: {fileID: 656499027}
+  sendRequest: {fileID: 0}
 --- !u!114 &1645173060
 MonoBehaviour:
   m_ObjectHideFlags: 0
