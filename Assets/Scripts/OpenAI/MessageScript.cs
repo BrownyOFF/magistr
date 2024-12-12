@@ -16,18 +16,13 @@ public class MessageScript : MonoBehaviour, IPointerClickHandler
 
     private float lastClickTime;
     private const float doubleClickThreshold = 0.3f;
-
+    public bool isEditing = false;
     void Start()
     {
         inputField = transform.GetChild(1).GetComponent<TMP_InputField>();
         sendRequest = GameObject.FindWithTag("Manager").GetComponent<SendRequest>();
         saveLoadScript = GameObject.FindWithTag("Manager").GetComponent<SaveLoadScript>();
-    }
-
-    public void Set(int idc, string message)
-    {
-        messageText = message;
-        id = idc;
+        id = sendRequest.GetIndexFromConversationHistory(messageText);
         inputField.gameObject.SetActive(false);
         messageBox.text = messageText;
     }
@@ -36,6 +31,7 @@ public class MessageScript : MonoBehaviour, IPointerClickHandler
     {
         if (Time.time - lastClickTime < doubleClickThreshold)
         {
+            isEditing = true;
             StartEditing();
             Debug.Log("clicked");
         }
@@ -52,17 +48,19 @@ public class MessageScript : MonoBehaviour, IPointerClickHandler
 
     void Update()
     {
-        if (inputField.isFocused)
+        if (isEditing)
         {
             // Перевірка на натискання Enter або Shift + Enter
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
+                    Debug.Log("shift + enter");
                     AddLineBreak(); // Додаємо абзац
                 }
                 else
                 {
+                    Debug.Log("shift");
                     SaveText(); // Зберігаємо текст
                 }
             }
@@ -70,6 +68,7 @@ public class MessageScript : MonoBehaviour, IPointerClickHandler
             // Перевірка на натискання ESC для скасування
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                Debug.Log("Escape");
                 CancelEditing(); // Відміна редагування
             }
         }
@@ -90,7 +89,8 @@ public class MessageScript : MonoBehaviour, IPointerClickHandler
         inputField.gameObject.SetActive(false);
         messageBox.gameObject.SetActive(true);
         sendRequest.conversationHistory[id]["content"] = messageText;
-        saveLoadScript.SaveConversationHistoryToFile(sendRequest.conversationHistory, sendRequest.worldName);
+        saveLoadScript.SaveConversationHistoryToFile(sendRequest.conversationHistory, sendRequest.worldNameBase);
+        isEditing = false;
     }
 
     private void CancelEditing()
@@ -98,5 +98,6 @@ public class MessageScript : MonoBehaviour, IPointerClickHandler
         inputField.text = messageText; // Повертаємо старий текст
         inputField.gameObject.SetActive(false);
         messageBox.gameObject.SetActive(true);
+        isEditing = false;
     }
 }

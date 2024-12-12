@@ -18,8 +18,7 @@ public class SendRequest : MonoBehaviour
     private TokenCount tokenCount;
     private SaveLoadScript saveLoadScript;
     public int maxTokens = 14000;
-    public string worldName; // Name of the world for saving and loading
-    private string worldNameBase; // Base name to access the saved file
+    public string worldNameBase; // Base name to access the saved file
 
     void Start()
     {
@@ -33,7 +32,7 @@ public class SendRequest : MonoBehaviour
     // First request to start the story.
     public IEnumerator CreateStartingStory(string worldName, string characterName, string genre, string preferences) 
     {
-        this.worldNameBase = worldName; // Save the world name to a separate variable for later access
+        worldNameBase = worldName; // Save the world name to a separate variable for later access
         ClearMemory(); // Clear history if this is the first request
         conversationHistory.Add(new Dictionary<string, string> {
             { "role", "system" },
@@ -84,6 +83,18 @@ public class SendRequest : MonoBehaviour
         Debug.Log("Conversation history loaded.");
     }
 
+    public int GetIndexFromConversationHistory(string content)
+    {
+        for (int i = 0; i < conversationHistory.Count; i++)
+        {
+            if (conversationHistory[i]["content"] == content)
+            {
+                return i; // Повертаємо індекс
+            }
+        }
+        return -1; // Якщо не знайдено
+    }
+    
     private IEnumerator SendAPIRequest(string apiUrl, string apiKey)
     {
         var jsonData = new {
@@ -129,7 +140,7 @@ public class SendRequest : MonoBehaviour
                         });
 
                         // Display the response
-                        showMessage.AddAIMessage(message, conversationHistory.Count - 1);
+                        showMessage.AddAIMessage(message);
                         createPanel.SetActive(false);
                         
                         // save

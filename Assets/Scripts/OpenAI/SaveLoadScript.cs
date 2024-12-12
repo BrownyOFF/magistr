@@ -93,7 +93,7 @@ public class SaveLoadScript : MonoBehaviour
             }
             else if (role == "assistant")
             {
-                showMessage.AddAIMessage(content, i);
+                showMessage.AddAIMessage(content);
             }
             i++;
         }

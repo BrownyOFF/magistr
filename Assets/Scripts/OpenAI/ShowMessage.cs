@@ -20,15 +20,14 @@ public class ShowMessage : MonoBehaviour
     public void AddUserMessage(string message)
     {
         GameObject newMessage = Instantiate(userMessagePrefab, content);
-        TMP_Text messageText = newMessage.transform.GetChild(0).GetComponent<TMP_Text>(); // Access the first child (Text TMP)
-        messageText.text = message; // Set the text
+        newMessage.GetComponent<MessageScript>().messageText = message;
     }
 
     // Function to add an AI response
-    public void AddAIMessage(string message, int id)
+    public void AddAIMessage(string message)
     {
         GameObject newMessage = Instantiate(aiMessagePrefab, content);
-        newMessage.GetComponent<MessageScript>().Set(id-1, message);
+        newMessage.GetComponent<MessageScript>().messageText = message;
 
         //TMP_Text messageText = newMessage.transform.GetChild(0).GetComponent<TMP_Text>(); // Access the first child (Text TMP)
         // messageText.text = message; 
