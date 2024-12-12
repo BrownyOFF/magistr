@@ -10,11 +10,14 @@ public class BttnSendInput : MonoBehaviour
     private SendRequest send;
     public GameObject inputField;
     private string userInput;
+    public bool isRegenerate;
+    private ShowMessage showMessage;
 
     void Start()
     {
         send = GameObject.FindWithTag("Manager").GetComponent<SendRequest>();
         bttn = gameObject.GetComponent<Button>();
+        showMessage = GameObject.FindWithTag("Manager").GetComponent<ShowMessage>();
         bttn.onClick.AddListener(SendInput);
     }
 
@@ -22,7 +25,14 @@ public class BttnSendInput : MonoBehaviour
     void SendInput()
     {
         Debug.Log("Bttn Pressed");
-        userInput = inputField.GetComponent<TMP_InputField>().text;
-        StartCoroutine(send.ContinueStory(userInput));
+        if (isRegenerate)
+        {
+            showMessage.RegenerateMessage();
+        }
+        else
+        {
+            userInput = inputField.GetComponent<TMP_InputField>().text;
+            StartCoroutine(send.ContinueStory(userInput));
+        }
     }
 }

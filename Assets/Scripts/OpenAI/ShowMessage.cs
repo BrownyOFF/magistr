@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 
@@ -11,6 +12,8 @@ public class ShowMessage : MonoBehaviour
     public GameObject aiMessagePrefab; // Prefab for AI messages
     public SendRequest sendRequest;
 
+    public List<GameObject> messagesObjects = new List<GameObject>();
+    
     public void Start()
     {
         sendRequest = GameObject.FindWithTag("Manager").GetComponent<SendRequest>();
@@ -21,6 +24,8 @@ public class ShowMessage : MonoBehaviour
     {
         GameObject newMessage = Instantiate(userMessagePrefab, content);
         newMessage.GetComponent<MessageScript>().messageText = message;
+        
+        messagesObjects.Add(newMessage);
     }
 
     // Function to add an AI response
@@ -29,8 +34,15 @@ public class ShowMessage : MonoBehaviour
         GameObject newMessage = Instantiate(aiMessagePrefab, content);
         newMessage.GetComponent<MessageScript>().messageText = message;
 
-        //TMP_Text messageText = newMessage.transform.GetChild(0).GetComponent<TMP_Text>(); // Access the first child (Text TMP)
-        // messageText.text = message; 
+        messagesObjects.Add(newMessage);
     }
 
+    public void RegenerateMessage()
+    {
+        GameObject var = messagesObjects.Last();
+        messagesObjects.RemoveAt(messagesObjects.Count - 1);
+        sendRequest.conversationHistory.RemoveAt(sendRequest.conversationHistory.Count - 1);
+        Destroy(var);
+        StartCoroutine(sendRequest.SendAPIRequest(sendRequest.apiUrl, sendRequest.apiKey));
+    }
 }

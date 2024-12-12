@@ -11,8 +11,8 @@ public class SendRequest : MonoBehaviour
 {
     // Memory to store the conversation history
     public List<Dictionary<string, string>> conversationHistory = new List<Dictionary<string, string>>();
-    private string apiUrl;
-    private string apiKey;
+    public string apiUrl;
+    public string apiKey;
     private ShowMessage showMessage;
     public GameObject createPanel;
     private TokenCount tokenCount;
@@ -95,7 +95,7 @@ public class SendRequest : MonoBehaviour
         return -1; // Якщо не знайдено
     }
     
-    private IEnumerator SendAPIRequest(string apiUrl, string apiKey)
+    public IEnumerator SendAPIRequest(string apiUrl, string apiKey)
     {
         var jsonData = new {
             model = "gpt-4o-mini",
