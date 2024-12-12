@@ -81,6 +81,7 @@ public class SaveLoadScript : MonoBehaviour
         string worldName = Path.GetFileNameWithoutExtension(filePath);
         Debug.Log($"World loaded: {worldName}");
 
+        int i = 0;
         foreach (var message in conversationHistory)
         {
             string role = message["role"];
@@ -92,8 +93,9 @@ public class SaveLoadScript : MonoBehaviour
             }
             else if (role == "assistant")
             {
-                showMessage.AddAIMessage(content);
+                showMessage.AddAIMessage(content, i);
             }
+            i++;
         }
         sendRequest.LoadConversationHistory(filePath);
         loadPanel.SetActive(false);

@@ -7762,6 +7762,7 @@ MonoBehaviour:
   content: {fileID: 1346740993}
   userMessagePrefab: {fileID: 8322738714983752762, guid: db005dd29d24c5243ba4a83d63bd4174, type: 3}
   aiMessagePrefab: {fileID: 6499564670315540237, guid: d1cbe39d281182e49860ed4610823a92, type: 3}
+  sendRequest: {fileID: 0}
 --- !u!114 &1645173059
 MonoBehaviour:
   m_ObjectHideFlags: 0

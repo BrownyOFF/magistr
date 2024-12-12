@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 public class SendRequest : MonoBehaviour
 {
     // Memory to store the conversation history
-    private List<Dictionary<string, string>> conversationHistory = new List<Dictionary<string, string>>();
+    public List<Dictionary<string, string>> conversationHistory = new List<Dictionary<string, string>>();
     private string apiUrl;
     private string apiKey;
     private ShowMessage showMessage;
@@ -129,7 +129,7 @@ public class SendRequest : MonoBehaviour
                         });
 
                         // Display the response
-                        showMessage.AddAIMessage(message);
+                        showMessage.AddAIMessage(message, conversationHistory.Count - 1);
                         createPanel.SetActive(false);
                         
                         // save
