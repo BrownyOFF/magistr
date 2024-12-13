@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ public class SendRequest : MonoBehaviour
     public string apiUrl;
     public string apiKey;
     private ShowMessage showMessage;
+    private ImageSendRequest imageSendRequest;
     public GameObject createPanel;
     private TokenCount tokenCount;
     private SaveLoadScript saveLoadScript;
@@ -27,6 +29,7 @@ public class SendRequest : MonoBehaviour
         showMessage = GetComponent<ShowMessage>();
         tokenCount = GetComponent<TokenCount>();
         saveLoadScript = GetComponent<SaveLoadScript>();
+        imageSendRequest = GetComponent<ImageSendRequest>();
     }
 
     // First request to start the story.
@@ -94,7 +97,71 @@ public class SendRequest : MonoBehaviour
         }
         return -1; // Якщо не знайдено
     }
-    
+
+    public IEnumerator GeneratePromptForImage()
+    {
+        var conversationForImage = new List<Dictionary<string, string>>(conversationHistory);
+
+        conversationForImage.Add(new Dictionary<string, string>
+        {
+            { "role", "user" },
+            {
+                "content",
+                "Based on the current story in the conversation history, generate a detailed and creative prompt for the DALL·E model to create an image that reflects the current state of the narrative. The image should fit the tone and genre of the story (e.g., fantasy, sci-fi, or historical) and be visually compelling for use in an interactive story."
+            }
+        });
+
+        var jsonData = new
+        {
+            model = "gpt-4o-mini",
+            messages = conversationForImage,
+            max_tokens = 250,
+            temperature = 1
+        };
+
+        string jsonString = JsonConvert.SerializeObject(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(apiUrl, "POST"))
+        {
+            byte[] jsonToSend = Encoding.UTF8.GetBytes(jsonString);
+            request.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string responseText = request.downloadHandler.text;
+                Debug.Log("API Response: " + responseText);
+
+                try
+                {
+                    JObject responseObject = JObject.Parse(responseText);
+                    string message = responseObject["choices"]?[0]?["message"]?["content"]?.ToString();
+                    if (!string.IsNullOrEmpty(message))
+                    {
+                        Debug.Log("Generated Prompt: " + message);
+                        StartCoroutine(imageSendRequest.GenerateImage(message));
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Response does not contain a valid prompt.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Error parsing API response: " + e.Message);
+                }
+            }
+            else
+            {
+                Debug.LogError($"Request failed with error: {request.error}. Response: {request.downloadHandler.text}");
+            }
+        }
+    }
+
     public IEnumerator SendAPIRequest(string apiUrl, string apiKey)
     {
         var jsonData = new {
