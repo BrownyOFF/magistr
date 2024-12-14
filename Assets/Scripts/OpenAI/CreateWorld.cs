@@ -20,7 +20,7 @@ public class CreateWorld : MonoBehaviour
 
     private SendRequest send;
 
-    private Toggle toggleFamily;
+    public Toggle toggleFamily;
     void Start()
     {
         bttn = gameObject.GetComponent<Button>();
