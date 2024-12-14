@@ -6305,6 +6305,7 @@ MonoBehaviour:
   chara: {fileID: 2098334282}
   genre: {fileID: 1309396901}
   preferenses: {fileID: 1197939913}
+  toggleFamily: {fileID: 1765573865}
 --- !u!1 &1010336920
 GameObject:
   m_ObjectHideFlags: 0
