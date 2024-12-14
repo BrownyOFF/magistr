@@ -34,7 +34,7 @@ public class TokenCount : MonoBehaviour
     {
         while (CountTokensInConversation(conversationHistory) > maxTokens && conversationHistory.Count > 2)
         {
-            conversationHistory.RemoveAt(1); // Видаляємо другий запис, залишаючи перший
+            conversationHistory.RemoveAt(3); // Видаляємо запис
         }
     }
 }

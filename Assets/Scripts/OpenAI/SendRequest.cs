@@ -37,9 +37,19 @@ public class SendRequest : MonoBehaviour
     {
         worldNameBase = worldName; // Save the world name to a separate variable for later access
         ClearMemory(); // Clear history if this is the first request
+        var startMessage = "";
+        if (PlayerPrefs.GetInt("familyMode") == 1)
+        {
+            startMessage =
+                "You are a story generator designed for family-friendly content. Create stories suitable for children, avoiding violence, cruelty, complex romantic themes, profanity, or any content inappropriate for younger audiences. Focus on positive adventures, educational themes, humor, and uplifting messages that encourage kindness, creativity, and imagination.";
+        }
+        else
+        {
+            startMessage = "You are a creative story generator who writes immersive stories based on user input.";
+        }
         conversationHistory.Add(new Dictionary<string, string> {
             { "role", "system" },
-            { "content", "You are a creative story generator who writes immersive stories based on user input." }
+            { "content", startMessage }
         });
 
         // Add the user's input for the first story
@@ -113,7 +123,7 @@ public class SendRequest : MonoBehaviour
 
         var jsonData = new
         {
-            model = "gpt-4o-mini",
+            model = PlayerPrefs.GetString("textModel"),
             messages = conversationForImage,
             max_tokens = 250,
             temperature = 1
@@ -165,7 +175,7 @@ public class SendRequest : MonoBehaviour
     public IEnumerator SendAPIRequest(string apiUrl, string apiKey)
     {
         var jsonData = new {
-            model = "gpt-4o-mini",
+            model = PlayerPrefs.GetString("textModel"),
             messages = conversationHistory,
             max_tokens = PlayerPrefs.GetInt("maxTok"),
             temperature = PlayerPrefs.GetFloat("temp")

@@ -22,10 +22,10 @@ Token count and rimming --- done \
 Save conversation to file for future loading --- done \
 Load saved conversations --- done \
 regenerate reply --- done \
-Image generation --- done
+Image generation --- done \
+wider Settings --- done
 ### To do
-Music generation(probably) \
 QoL \
 Bug Fixes
 ### Current task
-wide Settings menu
+Music Player 

@@ -21,7 +21,7 @@ public class ImageSendRequest : MonoBehaviour
 
     public IEnumerator GenerateImage(string prompt)
     {
-        var jsonData = JsonConvert.SerializeObject(new { model = "dall-e-2", prompt = prompt, n = 1, size = "1024x1024" });
+        var jsonData = JsonConvert.SerializeObject(new { model = PlayerPrefs.GetString("imageModel"), prompt = prompt, n = 1, size = "1024x1024" });
         var request = new UnityWebRequest(API_URL, "POST");
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);

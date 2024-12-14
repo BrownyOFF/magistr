@@ -19,19 +19,21 @@ public class CreateWorld : MonoBehaviour
     private Button bttn;
 
     private SendRequest send;
-    private ShowMessage showMessage;
-    public GameObject wholePanel;
 
+    private Toggle toggleFamily;
     void Start()
     {
         bttn = gameObject.GetComponent<Button>();
         bttn.onClick.AddListener(generate);
         send = GameObject.FindWithTag("Manager").GetComponent<SendRequest>();
-        showMessage = GameObject.FindWithTag("Manager").GetComponent<ShowMessage>();
     }
 
     public void generate()
     {
+        if(toggleFamily.isOn)
+            PlayerPrefs.SetInt("familyMode", 1);
+        else
+            PlayerPrefs.SetInt("familyMode", 0);
         nameWorld = world.text.ToString();
         nameChara = chara.text.ToString();
         Genre = genre.text.ToString();
