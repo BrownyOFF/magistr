@@ -11,14 +11,14 @@ public class ImageSendRequest : MonoBehaviour
 {
     public SendRequest sendRequest;
     public Image image;
-
+    
     private string API_URL = "https://api.openai.com/v1/images/generations";
 
     private void Start()
     {
         sendRequest = GetComponent<SendRequest>();
     }
-
+    
     public IEnumerator GenerateImage(string prompt)
     {
         var jsonData = JsonConvert.SerializeObject(new { model = PlayerPrefs.GetString("imageModel"), prompt = prompt, n = 1, size = "1024x1024" });

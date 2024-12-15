@@ -16,7 +16,6 @@ public class SettingsApply : MonoBehaviour
     public Slider maxSlid;
     public TMP_Dropdown dropdownText;
     public TMP_Dropdown dropdownImage;
-    public Toggle toggleImage;
 
     private Button bttn;
     void Start()
@@ -36,7 +35,6 @@ public class SettingsApply : MonoBehaviour
         PlayerPrefs.SetString("textModel", "gpt-4o-mini");
         PlayerPrefs.SetString("imageModel", "dall-e-2");
         PlayerPrefs.SetInt("familyMode", 0);
-        PlayerPrefs.SetInt("autoImage", 0);
     }
     
     void ApplySett()
@@ -67,10 +65,6 @@ public class SettingsApply : MonoBehaviour
                 break;
         }
         
-        if(toggleImage.isOn)
-            PlayerPrefs.SetInt("autoImage", 1);
-        else
-            PlayerPrefs.SetInt("autoImage", 0);
 
         Debug.Log(PlayerPrefs.GetString("API") + "\n" + PlayerPrefs.GetFloat("temp") + "\n" + PlayerPrefs.GetInt("maxTok"));
     }

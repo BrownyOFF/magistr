@@ -21,6 +21,7 @@ public class SendRequest : MonoBehaviour
     private SaveLoadScript saveLoadScript;
     public int maxTokens = 14000;
     public string worldNameBase; // Base name to access the saved file
+    public int count;
 
     void Start()
     {
@@ -30,6 +31,7 @@ public class SendRequest : MonoBehaviour
         tokenCount = GetComponent<TokenCount>();
         saveLoadScript = GetComponent<SaveLoadScript>();
         imageSendRequest = GetComponent<ImageSendRequest>();
+        count = 0;
     }
 
     // First request to start the story.
@@ -128,7 +130,6 @@ public class SendRequest : MonoBehaviour
             max_tokens = 250,
             temperature = 1
         };
-
         string jsonString = JsonConvert.SerializeObject(jsonData);
 
         using (UnityWebRequest request = new UnityWebRequest(apiUrl, "POST"))

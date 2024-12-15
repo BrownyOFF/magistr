@@ -32,6 +32,7 @@ public class BttnSendInput : MonoBehaviour
         else
         {
             userInput = inputField.GetComponent<TMP_InputField>().text;
+            inputField.GetComponent<TMP_InputField>().text = "";
             StartCoroutine(send.ContinueStory(userInput));
         }
     }

@@ -12,7 +12,6 @@ public class SettingsOpen : MonoBehaviour
     public Slider maxSlid;
     public TMP_Dropdown dropdownText;
     public TMP_Dropdown dropdownImage;
-    public Toggle autoImage;
     
     private Button bttn;
 
@@ -59,11 +58,6 @@ public class SettingsOpen : MonoBehaviour
                     break;
 
             }
-            
-            if(PlayerPrefs.GetInt("autoImage") == 1)
-                autoImage.isOn = true;
-            else
-                autoImage.isOn = false;
             
             panel.SetActive(true);
             isOpen = true;
