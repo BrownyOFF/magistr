@@ -16,10 +16,13 @@ public class SettingsApply : MonoBehaviour
     public Slider maxSlid;
     public TMP_Dropdown dropdownText;
     public TMP_Dropdown dropdownImage;
+    
+    public SendRequest sendRequest;
 
     private Button bttn;
     void Start()
     {
+        sendRequest = GameObject.FindWithTag("Manager").GetComponent<SendRequest>();
         bttn = gameObject.GetComponent<Button>();
         bttn.onClick.AddListener(ApplySett);
         if (!PlayerPrefs.HasKey("temp"))
@@ -65,7 +68,7 @@ public class SettingsApply : MonoBehaviour
                 break;
         }
         
-
+        sendRequest.apiKey = PlayerPrefs.GetString("API");
         Debug.Log(PlayerPrefs.GetString("API") + "\n" + PlayerPrefs.GetFloat("temp") + "\n" + PlayerPrefs.GetInt("maxTok"));
     }
 }

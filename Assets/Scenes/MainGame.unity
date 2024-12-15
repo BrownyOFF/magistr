@@ -11484,7 +11484,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &1543755608
 GameObject:
   m_ObjectHideFlags: 0
@@ -12685,6 +12685,7 @@ MonoBehaviour:
   maxTokens: 14000
   worldNameBase: 
   count: 0
+  isRequestInProgress: 0
 --- !u!4 &1645173057
 Transform:
   m_ObjectHideFlags: 0
@@ -14616,7 +14617,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &1945606090
 GameObject:
   m_ObjectHideFlags: 0
@@ -15383,8 +15384,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 7
-  m_InputType: 2
+  m_ContentType: 0
+  m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0

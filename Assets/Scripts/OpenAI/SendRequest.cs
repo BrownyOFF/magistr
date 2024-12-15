@@ -23,6 +23,8 @@ public class SendRequest : MonoBehaviour
     public string worldNameBase; // Base name to access the saved file
     public int count;
 
+    public bool isRequestInProgress = false;
+    
     void Start()
     {
         apiKey = PlayerPrefs.GetString("API");
@@ -69,6 +71,11 @@ public class SendRequest : MonoBehaviour
     // Subsequent requests to continue the story.
     public IEnumerator ContinueStory(string userInput) 
     {
+        if (isRequestInProgress)
+        {
+            Debug.Log("Запит вже обробляється.");
+            yield break; // Виходимо з методу, якщо запит вже обробляється
+        }
         // display message
         Debug.Log("Continue story started");
         showMessage.AddUserMessage(userInput);
@@ -112,6 +119,13 @@ public class SendRequest : MonoBehaviour
 
     public IEnumerator GeneratePromptForImage()
     {
+        if (isRequestInProgress)
+        {
+            Debug.Log("Запит вже обробляється.");
+            yield break; // Виходимо з методу, якщо запит вже обробляється
+        }
+
+        isRequestInProgress = true; // Встановлюємо, що запит почав оброблятися
         var conversationForImage = new List<Dictionary<string, string>>(conversationHistory);
 
         conversationForImage.Add(new Dictionary<string, string>
@@ -137,7 +151,7 @@ public class SendRequest : MonoBehaviour
             byte[] jsonToSend = Encoding.UTF8.GetBytes(jsonString);
             request.uploadHandler = new UploadHandlerRaw(jsonToSend);
             request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+            request.SetRequestHeader("Authorization", $"Bearer {PlayerPrefs.GetString("API")}");
             request.SetRequestHeader("Content-Type", "application/json");
 
             yield return request.SendWebRequest();
@@ -175,6 +189,14 @@ public class SendRequest : MonoBehaviour
 
     public IEnumerator SendAPIRequest(string apiUrl, string apiKey)
     {
+        if (isRequestInProgress)
+        {
+            Debug.Log("Запит вже обробляється.");
+            yield break; // Виходимо з методу, якщо запит вже обробляється
+        }
+
+        isRequestInProgress = true; // Встановлюємо, що запит почав оброблятися
+        
         var jsonData = new {
             model = PlayerPrefs.GetString("textModel"),
             messages = conversationHistory,
@@ -190,7 +212,7 @@ public class SendRequest : MonoBehaviour
             byte[] jsonToSend = Encoding.UTF8.GetBytes(jsonString);
             request.uploadHandler = new UploadHandlerRaw(jsonToSend);
             request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+            request.SetRequestHeader("Authorization", $"Bearer {PlayerPrefs.GetString("API")}");
             request.SetRequestHeader("Content-Type", "application/json");
 
             yield return request.SendWebRequest();
@@ -238,6 +260,7 @@ public class SendRequest : MonoBehaviour
             {
                 Debug.LogError($"Request Failed: {request.error}\nResponse: {request.downloadHandler.text}");
             }
+            isRequestInProgress = false; // Встановлюємо, що запит завершено
         }
     }
 

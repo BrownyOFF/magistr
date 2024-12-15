@@ -18,6 +18,11 @@ public class ImageGenerateBttn : MonoBehaviour
     // Update is called once per frame
     void Script()
     {
+        if (sendRequest.conversationHistory.Count == 0)
+        {
+            Debug.Log("No conversation found");
+            return;
+        }
         StartCoroutine(sendRequest.GeneratePromptForImage());
     }
 }
