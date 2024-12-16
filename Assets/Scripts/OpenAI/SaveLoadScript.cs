@@ -2,9 +2,11 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class SaveLoadScript : MonoBehaviour
@@ -15,11 +17,13 @@ public class SaveLoadScript : MonoBehaviour
     public ShowMessage showMessage;
     public GameObject loadPanel;
     public SendRequest sendRequest;
-
+    public ImageSendRequest imageSendRequest;
+    
     public void Start()
     {
         showMessage = gameObject.GetComponent<ShowMessage>();
         sendRequest = gameObject.GetComponent<SendRequest>();
+        imageSendRequest = gameObject.GetComponent<ImageSendRequest>();
     }
 
     // Метод для збереження історії розмови у файл
@@ -43,7 +47,7 @@ public class SaveLoadScript : MonoBehaviour
         File.WriteAllText(filePath, jsonData);
         Debug.Log($"Conversation history saved to {filePath}");
     }
-
+    
     // Clean prefabs
     public void CleanBttn()
     {
@@ -98,9 +102,43 @@ public class SaveLoadScript : MonoBehaviour
             i++;
         }
         sendRequest.LoadConversationHistory(filePath);
+        GetLatestImageFile();
         loadPanel.SetActive(false);
     }
+
+    public void GetLatestImageFile()
+    {
+        string folderPath = Application.persistentDataPath;
+        string fileExtension = ".png";
+
+        string[] files = Directory.GetFiles(folderPath, $"*{fileExtension}");
+
+        var filteredFiles = files.Where(file =>
+        {
+            string fileName = Path.GetFileNameWithoutExtension(file);
+            return fileName.StartsWith(sendRequest.worldNameBase) && long.TryParse(fileName.Split('_').Last(), out _);
+        });
+
+        if (!filteredFiles.Any())
+        {
+            Debug.LogWarning("No image files found matching the format.");
+            return;
+        }
+
+        string latestFile = filteredFiles
+            .OrderByDescending(file =>
+            {
+                string fileName = Path.GetFileNameWithoutExtension(file);
+                long timestamp = long.Parse(fileName.Split('_').Last());
+                return timestamp;
+            })
+            .FirstOrDefault();
+
+        // Виклик корутини
+        StartCoroutine(imageSendRequest.LoadImageToUI(latestFile));
+    }
     
+
     // Метод для завантаження історії розмови з файлу
     public List<Dictionary<string, string>> LoadConversationHistoryFromFile(string filePath)
     {

@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TMPro;
+using UnityEngine.UIElements;
 
 public class SendRequest : MonoBehaviour
 {
@@ -22,8 +24,16 @@ public class SendRequest : MonoBehaviour
     public int maxTokens = 14000;
     public string worldNameBase; // Base name to access the saved file
     public int count;
-
+    public GameObject resultPanel;
     public bool isRequestInProgress = false;
+
+    public void ShowPanelForLog(string message, bool needButton)
+    {
+        resultPanel.SetActive(true);
+        resultPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = message;
+        if(needButton)
+            resultPanel.transform.GetChild(1).gameObject.SetActive(true);
+    }
     
     void Start()
     {
@@ -126,6 +136,7 @@ public class SendRequest : MonoBehaviour
         }
 
         isRequestInProgress = true; // Встановлюємо, що запит почав оброблятися
+        ShowPanelForLog("Loading prompt for image...", false);
         var conversationForImage = new List<Dictionary<string, string>>(conversationHistory);
 
         conversationForImage.Add(new Dictionary<string, string>
@@ -197,6 +208,7 @@ public class SendRequest : MonoBehaviour
         }
 
         isRequestInProgress = true; // Встановлюємо, що запит почав оброблятися
+        ShowPanelForLog("Loading prompt to server...", false);
         
         var jsonData = new {
             model = PlayerPrefs.GetString("textModel"),
@@ -262,6 +274,7 @@ public class SendRequest : MonoBehaviour
                 Debug.LogError($"Request Failed: {request.error}\nResponse: {request.downloadHandler.text}");
             }
             isRequestInProgress = false; // Встановлюємо, що запит завершено
+            resultPanel.SetActive(false);
         }
     }
 

@@ -29,7 +29,7 @@ public class ImageSendRequest : MonoBehaviour
             yield break; // Виходимо з методу, якщо запит вже обробляється
         }
         sendRequest.isRequestInProgress = true;
-        
+        sendRequest.ShowPanelForLog("Generating Image...", false);
         var jsonData = JsonConvert.SerializeObject(new { model = PlayerPrefs.GetString("imageModel"), prompt = prompt, n = 1, size = "1024x1024" });
         var request = new UnityWebRequest(API_URL, "POST");
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
@@ -51,6 +51,7 @@ public class ImageSendRequest : MonoBehaviour
         }
 
         sendRequest.isRequestInProgress = false;
+        sendRequest.resultPanel.SetActive(false);
     }
     public string GenerateUniqueFileName()
     {
@@ -79,7 +80,26 @@ public class ImageSendRequest : MonoBehaviour
             Debug.LogError("Error loading image: " + request.error);
         }
     }
+    public IEnumerator LoadImageToUI(string filePath)
+    {
+        string fileUrl = "file://" + filePath; // Додаємо протокол file:// для локальних файлів
+        using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(fileUrl))
+        {
+            yield return request.SendWebRequest();
 
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Texture2D texture = DownloadHandlerTexture.GetContent(request);
+                Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                image.sprite = sprite; // Встановлюємо у компонент Image
+            }
+            else
+            {
+                Debug.LogError($"Помилка завантаження зображення: {request.error}");
+            }
+        }
+    }
+    
     [System.Serializable]
     public class DALLEImageResponse
     {

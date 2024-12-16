@@ -33,7 +33,9 @@ public class MusicPlayer : MonoBehaviour
         audioClips.AddRange(clipsCyberpunk);
         AudioClip[] fantasyCyberpunk = Resources.LoadAll<AudioClip>("Music/fantasy");
         audioClips.AddRange(fantasyCyberpunk);
-
+        AudioClip[] modernCyberpunk = Resources.LoadAll<AudioClip>("Music/modern");
+        audioClips.AddRange(modernCyberpunk);
+        
         tracksDropdown.onValueChanged.AddListener(OnPlaylistChanged);
         
         OnPlaylistChanged(tracksDropdown.value);
@@ -65,7 +67,9 @@ public class MusicPlayer : MonoBehaviour
             case 1:
                 audioClips = new List<AudioClip>(Resources.LoadAll<AudioClip>("Music/fantasy"));
                 break;
-            // Додайте інші випадки, якщо є інші плейлісти
+            case 2:
+                audioClips = new List<AudioClip>(Resources.LoadAll<AudioClip>("Music/modern"));
+                break;
         }
 
         // Відтворюємо перший трек з нового списку
