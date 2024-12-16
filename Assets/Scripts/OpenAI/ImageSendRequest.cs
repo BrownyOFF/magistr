@@ -21,6 +21,8 @@ public class ImageSendRequest : MonoBehaviour
     
     public IEnumerator GenerateImage(string prompt)
     {
+        if (sendRequest.conversationHistory.Count == 0)
+            yield break;
         if (sendRequest.isRequestInProgress)
         {
             Debug.Log("Запит вже обробляється.");

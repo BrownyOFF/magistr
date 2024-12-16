@@ -25,6 +25,10 @@ public class BttnSendInput : MonoBehaviour
     void SendInput()
     {
         Debug.Log("Bttn Pressed");
+        if (send.isRequestInProgress || send.conversationHistory.Count == 0)
+        {
+            return;
+        }
         if (isRegenerate)
         {
             showMessage.RegenerateMessage();

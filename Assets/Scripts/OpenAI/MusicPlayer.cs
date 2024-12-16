@@ -22,6 +22,9 @@ public class MusicPlayer : MonoBehaviour
     
     private bool isShuffle = false;
     private bool isLoop = false;
+    
+    public Sprite pauseSprite;
+    public Sprite playSprite;
 
     void Start()
     {
@@ -110,6 +113,7 @@ public class MusicPlayer : MonoBehaviour
         if (audioSource.isPlaying)
         {
             audioSource.Pause();
+            playButton.gameObject.GetComponent<Image>().sprite = playSprite;
         }
         else
         {
@@ -120,6 +124,7 @@ public class MusicPlayer : MonoBehaviour
             else
             {
                 audioSource.Play();
+                playButton.gameObject.GetComponent<Image>().sprite = pauseSprite;
             }
         }
     }

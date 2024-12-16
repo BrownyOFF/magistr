@@ -13,7 +13,6 @@ public class ButtonCreate : MonoBehaviour
         bttn = gameObject.GetComponent<Button>();
         panelOpen.SetActive(false);
         bttn.onClick.AddListener(Script);
-
     }
 
     void Script()
