@@ -3,13 +3,9 @@
 
 A qualification work from Halas Tymur. 
 
-
-
-
 ## API Reference
 
-This project use OpenAI API for text generation(specifically gpt-4o-mini for low-cost usage), image generation
-
+This project use OpenAI API for text generation(gpt4o-mini, gpt4o, gpt3.5-turbo), image generation(DALL-E 3/2)
 
 ## Progress
 
@@ -23,9 +19,10 @@ Save conversation to file for future loading --- done \
 Load saved conversations --- done \
 regenerate reply --- done \
 Image generation --- done \
-wider Settings --- done
+wider Settings --- done \
+Music Player --- done
+Bug Fixes --- done(probably)
 ### To do
-QoL \
-Bug Fixes
+---
 ### Current task
-Music Player 
+QoL
