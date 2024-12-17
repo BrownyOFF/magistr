@@ -20,7 +20,7 @@ Load saved conversations --- done \
 regenerate reply --- done \
 Image generation --- done \
 wider Settings --- done \
-Music Player --- done
+Music Player --- done \
 Bug Fixes --- done(probably)
 ### To do
 ---

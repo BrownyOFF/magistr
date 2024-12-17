@@ -30,6 +30,7 @@ public class SendRequest : MonoBehaviour
     public void ShowPanelForLog(string message, bool needButton)
     {
         resultPanel.SetActive(true);
+        resultPanel.transform.GetChild(1).gameObject.SetActive(false);
         resultPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = message;
         if(needButton)
             resultPanel.transform.GetChild(1).gameObject.SetActive(true);
@@ -255,6 +256,7 @@ public class SendRequest : MonoBehaviour
                         // Display the response
                         showMessage.AddAIMessage(message);
                         createPanel.SetActive(false);
+                        
                         
                         // save
                         saveLoadScript.SaveConversationHistoryToFile(conversationHistory, worldNameBase);
