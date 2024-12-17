@@ -8,6 +8,7 @@ public class ButtonCreate : MonoBehaviour
     Button bttn;
     public GameObject panelOpen;
     public GameObject panelClose;
+    public int tmp;
     void Start()
     {
         bttn = gameObject.GetComponent<Button>();
