@@ -23,12 +23,7 @@ public class ImageSendRequest : MonoBehaviour
     {
         if (sendRequest.conversationHistory.Count == 0)
             yield break;
-        if (sendRequest.isRequestInProgress)
-        {
-            Debug.Log("Запит вже обробляється.");
-            yield break; // Виходимо з методу, якщо запит вже обробляється
-        }
-        sendRequest.isRequestInProgress = true;
+        
         sendRequest.ShowPanelForLog("Generating Image...", false);
         var jsonData = JsonConvert.SerializeObject(new { model = PlayerPrefs.GetString("imageModel"), prompt = prompt, n = 1, size = "1024x1024" });
         var request = new UnityWebRequest(API_URL, "POST");
@@ -48,9 +43,8 @@ public class ImageSendRequest : MonoBehaviour
         else
         {
             Debug.LogError("Error: " + request.error);
+            sendRequest.ShowPanelForLog("Error: " + request.error, true);
         }
-
-        sendRequest.isRequestInProgress = false;
         sendRequest.resultPanel.SetActive(false);
     }
     public string GenerateUniqueFileName()

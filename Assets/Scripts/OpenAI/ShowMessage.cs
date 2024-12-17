@@ -19,12 +19,19 @@ public class ShowMessage : MonoBehaviour
         sendRequest = GameObject.FindWithTag("Manager").GetComponent<SendRequest>();
     }
 
+    public void DeleteAllMessages()
+    {
+        foreach (var varGameObject in messagesObjects)
+        {
+            Destroy(varGameObject);
+        }
+    }
     // Function to add a user message
     public void AddUserMessage(string message)
     {
         GameObject newMessage = Instantiate(userMessagePrefab, content);
         newMessage.GetComponent<MessageScript>().messageText = message;
-        
+
         messagesObjects.Add(newMessage);
     }
 

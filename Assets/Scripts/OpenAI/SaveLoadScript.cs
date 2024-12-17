@@ -84,14 +84,17 @@ public class SaveLoadScript : MonoBehaviour
         List<Dictionary<string, string>> conversationHistory = LoadConversationHistoryFromFile(filePath);
         string worldName = Path.GetFileNameWithoutExtension(filePath);
         Debug.Log($"World loaded: {worldName}");
-
+        if (showMessage.messagesObjects.Count != 0)
+        {
+            showMessage.DeleteAllMessages();
+        }
         int i = 0;
         foreach (var message in conversationHistory)
         {
             string role = message["role"];
             string content = message["content"];
             
-            if (role == "user")
+            if (role == "user" && content != "")
             {
                 showMessage.AddUserMessage(content);
             }

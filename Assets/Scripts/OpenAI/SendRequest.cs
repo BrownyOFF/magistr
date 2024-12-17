@@ -26,7 +26,8 @@ public class SendRequest : MonoBehaviour
     public int count;
     public GameObject resultPanel;
     public bool isRequestInProgress = false;
-
+    public TMP_InputField inputField;
+    
     public void ShowPanelForLog(string message, bool needButton)
     {
         resultPanel.SetActive(true);
@@ -51,7 +52,11 @@ public class SendRequest : MonoBehaviour
     public IEnumerator CreateStartingStory(string worldName, string characterName, string genre, string preferences) 
     {
         worldNameBase = worldName; // Save the world name to a separate variable for later access
-        ClearMemory(); // Clear history if this is the first request
+        
+        ClearMemory(); 
+        if(showMessage.messagesObjects.Count != 0)
+            showMessage.DeleteAllMessages();// Clear history if this is the first request
+        
         var startMessage = "";
         if (PlayerPrefs.GetInt("familyMode") == 1)
         {
@@ -89,7 +94,10 @@ public class SendRequest : MonoBehaviour
         }
         // display message
         Debug.Log("Continue story started");
-        showMessage.AddUserMessage(userInput);
+        if(userInput != "")
+        {
+            showMessage.AddUserMessage(userInput);
+        }
 
         // Add the user's input to the conversation history
         conversationHistory.Add(new Dictionary<string, string> {
@@ -130,13 +138,6 @@ public class SendRequest : MonoBehaviour
 
     public IEnumerator GeneratePromptForImage()
     {
-        if (isRequestInProgress)
-        {
-            Debug.Log("Запит вже обробляється.");
-            yield break; // Виходимо з методу, якщо запит вже обробляється
-        }
-
-        isRequestInProgress = true; // Встановлюємо, що запит почав оброблятися
         ShowPanelForLog("Loading prompt for image...", false);
         var conversationForImage = new List<Dictionary<string, string>>(conversationHistory);
 
@@ -180,22 +181,24 @@ public class SendRequest : MonoBehaviour
                     if (!string.IsNullOrEmpty(message))
                     {
                         Debug.Log("Generated Prompt: " + message);
-                        isRequestInProgress = false;
                         StartCoroutine(imageSendRequest.GenerateImage(message));
                     }
                     else
                     {
                         Debug.LogWarning("Response does not contain a valid prompt.");
+                        ShowPanelForLog("Response does not contain a valid prompt.", true);
                     }
                 }
                 catch (Exception e)
                 {
                     Debug.LogError("Error parsing API response: " + e.Message);
+                    ShowPanelForLog($"Error parsing the response: {e.Message}", true);
                 }
             }
             else
             {
                 Debug.LogError($"Request failed with error: {request.error}. Response: {request.downloadHandler.text}");
+                ShowPanelForLog($"Error parsing the response: {request.error}", true);
             }
         }
     }
@@ -264,22 +267,38 @@ public class SendRequest : MonoBehaviour
                     else
                     {
                         Debug.LogError("Choices array is empty or null.");
+                        DeleteMessage("Choices array is empty or null.");
                     }
                 }
                 catch (System.Exception ex)
                 {
                     Debug.LogError("Error parsing the response: " + ex.Message);
+                    DeleteMessage(ex.Message);
+                    
                 }
             }
             else
             {
                 Debug.LogError($"Request Failed: {request.error}\nResponse: {request.downloadHandler.text}");
+                DeleteMessage(request.error);
             }
             isRequestInProgress = false; // Встановлюємо, що запит завершено
             resultPanel.SetActive(false);
         }
     }
 
+    void DeleteMessage(string message)
+    {
+        ShowPanelForLog($"Error parsing the response: {message}", true);
+                    
+        var messageTemp = conversationHistory[conversationHistory.Count - 1];
+        string tmpMessage = messageTemp["content"];
+        inputField.text = tmpMessage;
+                    
+        Destroy(showMessage.messagesObjects[showMessage.messagesObjects.Count - 1]);
+        showMessage.messagesObjects.RemoveAt(showMessage.messagesObjects.Count - 1);
+        conversationHistory.RemoveAt(conversationHistory.Count - 1);
+    }
     // Clears the conversation history (optional for starting fresh).
     public void ClearMemory()
     {

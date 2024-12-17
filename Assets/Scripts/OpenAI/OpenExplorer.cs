@@ -18,7 +18,11 @@ public class OpenExplorer : MonoBehaviour
         string folderPath = Application.persistentDataPath;
         if (System.IO.Directory.Exists(folderPath))
         {
-            Process.Start("explorer.exe", folderPath.Replace("/", "\\")); 
+            #if UNITY_STANDALONE_WIN
+            Process.Start("explorer.exe", folderPath.Replace("/", "\\"));
+            #elif UNITY_STANDALONE_LINUX
+            Process.Start("xdg-open", folderPath);
+            #endif
         }
         else
         {
