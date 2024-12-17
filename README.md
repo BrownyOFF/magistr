@@ -21,8 +21,9 @@ regenerate reply --- done \
 Image generation --- done \
 wider Settings --- done \
 Music Player --- done \
-Bug Fixes --- done(probably)
+Bug Fixes --- done \
+QoL --- done
 ### To do
 ---
 ### Current task
-QoL
+---
