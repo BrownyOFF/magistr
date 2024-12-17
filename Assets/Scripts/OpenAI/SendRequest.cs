@@ -21,7 +21,7 @@ public class SendRequest : MonoBehaviour
     public GameObject createPanel;
     private TokenCount tokenCount;
     private SaveLoadScript saveLoadScript;
-    public int maxTokens = 14000;
+    public int maxTokens = 125000;
     public string worldNameBase; // Base name to access the saved file
     public int count;
     public GameObject resultPanel;

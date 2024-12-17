@@ -91,7 +91,7 @@ public class SettingsApply : MonoBehaviour
                 PlayerPrefs.SetString("textModel", "gpt-4o-mini");
                 break;
             case 2:
-                PlayerPrefs.SetString("textModel", "gpt-3.5-turbo");
+                PlayerPrefs.SetString("textModel", "gpt-4-turbo");
                 break;
         }
         switch (dropdownImage.value)
