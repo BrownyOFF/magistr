@@ -5,7 +5,7 @@ A qualification work from Halas Tymur.
 
 ## API Reference
 
-This project use OpenAI API for text generation(gpt4o-mini, gpt4o, gpt3.5-turbo), image generation(DALL-E 3/2)
+This project use OpenAI API for text generation(gpt4o-mini, gpt4o, gpt4-turbo), image generation(DALL-E 3/2)
 
 ## Progress
 
