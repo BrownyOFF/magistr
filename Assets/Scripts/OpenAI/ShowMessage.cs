@@ -11,12 +11,21 @@ public class ShowMessage : MonoBehaviour
     public GameObject userMessagePrefab; // Prefab for user messages
     public GameObject aiMessagePrefab; // Prefab for AI messages
     public SendRequest sendRequest;
+    public SaveLoadScript saveLoadScript;
 
     public List<GameObject> messagesObjects = new List<GameObject>();
     
     public void Start()
     {
         sendRequest = GameObject.FindWithTag("Manager").GetComponent<SendRequest>();
+        if (sendRequest == null)
+            Debug.LogError("sendRequest is null");
+
+        if (content == null)
+            Debug.LogError("content is null");
+
+        if (content.childCount == 0)
+            Debug.LogWarning("Content has no children");
     }
 
     public void DeleteAllMessages()
@@ -25,6 +34,8 @@ public class ShowMessage : MonoBehaviour
         {
             Destroy(varGameObject);
         }
+        messagesObjects.Clear();
+        saveLoadScript.arr.Clear();
     }
     // Function to add a user message
     public void AddUserMessage(string message)
@@ -33,6 +44,7 @@ public class ShowMessage : MonoBehaviour
         newMessage.GetComponent<MessageScript>().messageText = message;
 
         messagesObjects.Add(newMessage);
+        saveLoadScript.arr.Add(newMessage);
     }
 
     // Function to add an AI response
@@ -42,6 +54,7 @@ public class ShowMessage : MonoBehaviour
         newMessage.GetComponent<MessageScript>().messageText = message;
 
         messagesObjects.Add(newMessage);
+        saveLoadScript.arr.Add(newMessage);
     }
 
     public void RegenerateMessage()

@@ -16,11 +16,11 @@ public class SendRequest : MonoBehaviour
     public List<Dictionary<string, string>> conversationHistory = new List<Dictionary<string, string>>();
     public string apiUrl;
     public string apiKey;
-    private ShowMessage showMessage;
-    private ImageSendRequest imageSendRequest;
+    public ShowMessage showMessage;
+    public ImageSendRequest imageSendRequest;
     public GameObject createPanel;
-    private TokenCount tokenCount;
-    private SaveLoadScript saveLoadScript;
+    public TokenCount tokenCount;
+    public SaveLoadScript saveLoadScript;
     public int maxTokens = 125000;
     public string worldNameBase; // Base name to access the saved file
     public int count;
@@ -36,8 +36,8 @@ public class SendRequest : MonoBehaviour
         if(needButton)
             resultPanel.transform.GetChild(1).gameObject.SetActive(true);
     }
-    
-    void Start()
+
+    public void Start()
     {
         apiKey = PlayerPrefs.GetString("API");
         apiUrl = "https://api.openai.com/v1/chat/completions";

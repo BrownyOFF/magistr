@@ -27,6 +27,7 @@ public class TokenCount : MonoBehaviour
             totalTokens += EstimateTokens(message["content"]);
             totalTokens += 4; // Для службових токенів API
         }
+        Debug.Log(totalTokens);
         return totalTokens;
     }
     

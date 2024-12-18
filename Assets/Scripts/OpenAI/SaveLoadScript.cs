@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class SaveLoadScript : MonoBehaviour
 {
-    public GameObject[] arr;
+    public List<GameObject> arr = new List<GameObject>();
     public GameObject bttnPrefab;
     public Transform scrollContent;
     public ShowMessage showMessage;
@@ -51,14 +51,14 @@ public class SaveLoadScript : MonoBehaviour
     // Clean prefabs
     public void CleanBttn()
     {
-        arr = GameObject.FindGameObjectsWithTag("loadbttn");
-        if(arr.Length == 0)
+        if(arr.Count == 0)
             return;
         
         foreach (var i in arr)
         {
             Destroy(i);
         }
+        arr.Clear();
     }
     
     //load files and bttns
