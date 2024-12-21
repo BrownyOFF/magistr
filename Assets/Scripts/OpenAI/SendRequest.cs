@@ -208,7 +208,7 @@ public class SendRequest : MonoBehaviour
         if (isRequestInProgress)
         {
             Debug.Log("Запит вже обробляється.");
-            yield break; // Виходимо з методу, якщо запит вже обробляється
+            yield break; 
         }
 
         isRequestInProgress = true; // Встановлюємо, що запит почав оброблятися
